@@ -1,0 +1,45 @@
+<div class="bg-white p-6 rounded-lg shadow max-w-3xl mx-auto">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-xl font-bold">Jogadores Cadastrados</h2>
+    <button (click)="openModal()"
+            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+      + Jogador
+    </button>
+  </div>
+
+  <div *ngIf="players.length > 0; else emptyState">
+  <ul class="list-disc list-inside text-gray-700">
+    <li *ngFor="let p of players" class="flex justify-between items-center">
+      {{ p.name }}
+      <div class="space-x-2">
+        <button (click)="startEditing(p)" class="text-sm text-blue-600 hover:underline">Edit</button>
+        <button (click)="deletePlayer(p)" class="text-sm text-red-600 hover:underline">Delete</button>
+      </div>
+      </li>
+    </ul>
+  </div>
+
+  <ng-template #emptyState>
+    <div class="text-center text-gray-500 italic py-8">
+      Nenhum jogador cadastrado ainda. Clique no botão acima para começar!
+    </div>
+  </ng-template>
+
+</div>
+
+<app-modal [show]="showModal" (close)="closeModal()">
+  <h3 class="text-lg font-semibold mb-4">Cadastrar novo jogador</h3>  
+  <form (ngSubmit)="savePlayer()" class="space-y-4">
+    <input [(ngModel)]="name" name="name" type="text" placeholder="Nome do jogador"
+           class="w-full border rounded px-3 py-2" required />
+
+    <div class="flex justify-end gap-2">
+      <button type="button" (click)="closeModal()" class="text-gray-600 hover:underline">
+        Cancelar
+      </button>
+      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        Salvar
+      </button>
+    </div>
+  </form>
+</app-modal>

@@ -1,0 +1,27 @@
+<div class="p-6 max-w-2xl mx-auto bg-white rounded shadow">
+  <h2 class="text-2xl font-bold mb-4">Iniciar Sessão de Jogo</h2>
+
+  <form (ngSubmit)="iniciarSessao()">
+    <label class="block mb-2 font-medium">Data:</label>
+    <input [(ngModel)]="data" name="data" type="date" class="p-2 border rounded mb-4 w-full" />
+
+    <label class="block mb-2 font-medium">Quem está presente?</label>
+    <div class="grid grid-cols-2 gap-2">
+      <label *ngFor="let jogador of todosJogadores" class="flex items-center space-x-2">
+        <input type="checkbox" [(ngModel)]="jogador.presente" name="presente-{{ jogador.id }}" />
+        <span>{{ jogador.name }}</span>
+      </label>
+    </div>
+
+    <button type="submit" class="mt-6 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+      Iniciar Sessão
+    </button>
+  </form>
+
+  <div *ngIf="sessaoCriada" class="mt-6 border-t pt-4">
+    <h3 class="text-lg font-semibold mb-2">Sessão criada com {{ sessaoCriada.jogadores.length }} jogadores</h3>
+    <ul class="list-disc pl-5">
+      <li *ngFor="let j of sessaoCriada.jogadores">{{ j.name }}</li>
+    </ul>
+  </div>
+</div>
