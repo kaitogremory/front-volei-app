@@ -1,6 +1,5 @@
 import { trigger, transition, style, animate } from '@angular/animations';
 import { Component } from '@angular/core';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +18,5 @@ import { environment } from 'src/environments/environment';
   ]
 })
 export class AppComponent {
-  title = 'front-volei-app';
-  production: string = environment.production ? "sim" : "não";
+  title = 'front-volei-app';  
 }

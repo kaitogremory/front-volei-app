@@ -22,9 +22,13 @@
 # TypeScript cache
 *.tsbuildinfo
 
+# Firebase
+.firebase/
+
 # Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.firebase/
+
+
 

@@ -22,7 +22,7 @@ export class IniciarSessaoComponent {
     const novaSessao: SessaoDia = {
       id: crypto.randomUUID(),
       data: this.data,
-      jogadores: jogadoresPresentes,
+      jogadores: [],
       times: [],
       partidas: [],
     };

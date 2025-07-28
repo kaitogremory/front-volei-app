@@ -13,26 +13,24 @@ export class PresencaComponent {
 
   // Todos os jogadores cadastrados no sistema
   todosJogadores: (Player & { presente: boolean })[] = [
-    { id: '1', name: 'Caio', presente: false },
-    { id: '2', name: 'Ana', presente: false },
-    { id: '3', name: 'Bruno', presente: false }
+    
   ];
 
   sessaoCriada: SessaoDia | null = null;
 
   iniciarSessao() {
-    const jogadoresPresentes: SessaoJogador[] = this.todosJogadores
-      .filter(j => j.presente)
-      .map(j => ({
-        id: j.id,
-        name: j.name,
-        saiu: false
-      }));
+    // const jogadoresPresentes: SessaoJogador[] = this.todosJogadores
+    //   .filter(j => j.presente)
+    //   .map(j => ({
+    //     id: j.id,
+    //     name: j.name,
+    //     saiu: false
+    //   }));
 
     this.sessaoCriada = {
       id: crypto.randomUUID(),
       data: this.data,
-      jogadores: jogadoresPresentes,
+      jogadores: [],//jogadoresPresentes,
       times: [],
       partidas: []
     };

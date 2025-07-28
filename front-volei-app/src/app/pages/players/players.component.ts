@@ -13,6 +13,7 @@ import { ToastService } from 'src/app/services/toast.service';
 })
 export class PlayersComponent {
   name = '';
+  isMonthly: boolean = false;
   showModal: boolean = false;
   players: Player[] = [];
   editingPlayerId: string | null = null;
@@ -34,20 +35,22 @@ export class PlayersComponent {
   closeModal() {
     this.showModal = false;
     this.name = '';
+    this.editingPlayerId = '';
+    this.isMonthly = false;
   }
 
   startEditing(player: Player) {
     this.editingPlayerId = player.id;
+    this.isMonthly = player.isMonthly;  
     this.name = player.name;
-  this.openModal();
-}
+    this.openModal();
+  }
 
 
   public async getPlayers() {    
     try {
       this.loadingService.showLoading('getPlayers');
       const response = await this.playerService.getPlayers();
-      console.log(response)
       this.players = response;      
     } catch (err: any) {      
       this.baseService.processError(err);
@@ -57,8 +60,10 @@ export class PlayersComponent {
   }  
 
   async savePlayer() {
-    const request = { name: this.name };
-
+    const request = { 
+      name: this.name, 
+      isMonthly: this.isMonthly 
+    };
     try {
       this.loadingService.showLoading('savePlayer');
 
@@ -86,18 +91,17 @@ export class PlayersComponent {
   }
 
   async deletePlayer(player: Player) {
-  if (!confirm(`Deseja realmente remover o jogador ${player.name}?`)) return;
+    if (!confirm(`Deseja realmente remover o jogador ${player.name}?`)) return;
 
-  try {
-    this.loadingService.showLoading('deletePlayer');
-    await this.playerService.deletePlayer(player.id);
-    this.players = this.players.filter(p => p.id !== player.id);
-    this.toastService.show('Jogador removido com sucesso', 'success');
-  } catch (err: any) {    
-    this.baseService.processError(err);
-  } finally {
-    this.loadingService.hideLoading('deletePlayer');
+    try {
+      this.loadingService.showLoading('deletePlayer');
+      await this.playerService.deletePlayer(player.id);
+      this.players = this.players.filter(p => p.id !== player.id);
+      this.toastService.show('Jogador removido com sucesso', 'success');
+    } catch (err: any) {    
+      this.baseService.processError(err);
+    } finally {
+      this.loadingService.hideLoading('deletePlayer');
+    }
   }
-}
-
 }
