@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'iniciar-sessao', component: IniciarSessaoComponent },
   { path: 'presenca', component: PresencaComponent },
   { path: 'gerar-times', component: GerarTimesComponent },
-  { path: '**', redirectTo: 'login' }
+  { path: '**', redirectTo: 'jogadores' }
 ];
 
 @NgModule({
