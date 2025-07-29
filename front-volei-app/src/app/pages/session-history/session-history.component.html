@@ -1,0 +1,18 @@
+<h2 class="text-xl font-bold mb-4">Histórico de Sessões</h2>
+
+<table class="w-full text-sm border border-gray-200">
+  <thead>
+    <tr class="bg-gray-100">
+      <th class="text-left px-3 py-2">Data</th>
+      <th class="text-left px-3 py-2">Jogadores</th>
+      <th class="text-left px-3 py-2">Foram embora</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let session of sessions">
+      <td class="px-3 py-2">{{ session.date | date:'short' }}</td>
+      <td class="px-3 py-2">{{ session.players.length }}</td>
+      <td class="px-3 py-2">{{ session.playersGone.length }}</td>
+    </tr>
+  </tbody>
+</table>

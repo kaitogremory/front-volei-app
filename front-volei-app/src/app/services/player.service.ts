@@ -24,16 +24,14 @@ export class PlayerService {
     const url = `${this.apiUrl}`;
     const body = JSON.stringify(request);
     const headers  = this.authService.createDefaultHttpHeaders();
-        
-    return this.http.post(url, request, { headers }).toPromise();
+    return this.http.post(url, body, { headers }).toPromise();
   }
 
   async updatePlayer(id: string, request: any): Promise<any> {
     const url = `${this.apiUrl}/${id}`;
     const body = JSON.stringify(request);
     const headers  = this.authService.createDefaultHttpHeaders();
-
-    return this.http.put(url, request, { headers }).toPromise();
+    return this.http.put(url, body, { headers }).toPromise();
   }
 
   async deletePlayer(id: string): Promise<any> {

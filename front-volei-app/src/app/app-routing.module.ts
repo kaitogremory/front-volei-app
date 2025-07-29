@@ -1,19 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CadastroComponent } from './pages/cadastro/cadastro.component';
-import { LoginComponent } from './pages/login/login.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { IniciarSessaoComponent } from './pages/iniciar-sessao/iniciar-sessao.component';
-import { PresencaComponent } from './pages/presenca/presenca.component';
 import { GerarTimesComponent } from './pages/gerar-times/gerar-times.component';
 import { PlayersComponent } from './pages/players/players.component';
+import { ActiveSessionComponent } from './pages/active-session/active-session.component';
+import { SessionHistoryComponent } from './pages/session-history/session-history.component';
 
-const routes: Routes = [
-  // { path: 'login', component: LoginComponent },
-  // { path: 'cadastro', component: CadastroComponent },
+const routes: Routes = [  
   { path: 'jogadores', component: PlayersComponent },
-  { path: 'iniciar-sessao', component: IniciarSessaoComponent },
-  { path: 'presenca', component: PresencaComponent },
+  { path: 'sessao-ativa', component: ActiveSessionComponent },
+  { path: 'sessoes-passadas', component: SessionHistoryComponent },
   { path: 'gerar-times', component: GerarTimesComponent },
   { path: '**', redirectTo: 'jogadores' }
 ];

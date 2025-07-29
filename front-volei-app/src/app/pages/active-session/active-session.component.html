@@ -1,0 +1,146 @@
+<div class="bg-white shadow-md rounded-lg p-6 mb-6">
+  <h2 class="text-2xl font-semibold text-gray-800 mb-4 border-b pb-2"
+  > <span *ngIf="!session">Iniciar nova sessão</span>
+    <span *ngIf="session">Sessão Ativa</span>
+  </h2>
+
+  <div *ngIf="session">
+    <h3 class="text-lg text-green-600 font-medium flex items-center space-x-2">
+      <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"/>
+      </svg>
+      <span>{{ session.date | date:'dd/MM/yyyy' }}</span>
+    </h3>    
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Coluna 1: Iniciais -->
+      <div>
+        <p class="text-lg font-semibold text-gray-800 mb-4 mt-2">
+          Jogadores presentes: ({{ session.players?.length }})
+        </p>
+        <ul class="list-disc list-inside text-gray-800 space-y-1">
+          <li *ngFor="let player of session?.players" class="flex items-center justify-between">
+            <span>{{ player.name }}</span>
+            <button (click)="removeFromSession(player)" title="Remover da sessão" class="text-red-600 hover:text-red-800">
+              <!-- Ícone X -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Coluna 2: Ausentes -->
+      <div>
+        <p class="text-lg font-semibold text-gray-800 mb-4 mt-2">
+          Ausentes: ({{ notPresentTodayPlayers.length }})
+        </p>
+        <ul class="list-disc list-inside text-gray-800 space-y-1">
+          <li *ngFor="let player of notPresentTodayPlayers" class="flex items-center justify-between">
+            <span>{{ player.name }}</span>
+            <button (click)="addToSession(player)" title="Adicionar à sessão" class="text-green-600 hover:text-green-800">
+              <!-- Ícone + -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="flex justify-end">
+      <button class="bg-red-600 hover:bg-red-700 text-white font-semibold px-5 py-2 mt-4 rounded transition " (click)="showConfirmModal = true">
+        Encerrar Sessão
+      </button>
+    </div>
+
+    <app-confirmation-modal
+      [visible]="showConfirmModal"
+      [title]="'Encerramento de sessão ativa'"
+      [message]="'Deseja realmente encerrar a sessão?'"
+      [confirmText]="'Confirmar'"
+      [cancelText]="'Cancelar'"
+      (confirm)="closeSession()"
+      (cancel)="showConfirmModal = false"
+    ></app-confirmation-modal>
+  </div>
+  <div *ngIf="!session">
+    <div class="flex items-center justify-between bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded">
+      <div class="flex items-center space-x-2">
+        <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M18 10A8 8 0 11.001 10 8 8 0 0118 10zm-8 4a1 1 0 100-2 1 1 0 000 2zm-.707-7.707a1 1 0 011.414 0L11 7.586l1.293-1.293a1 1 0 011.414 1.414L12.414 9l1.293 1.293a1 1 0 01-1.414 1.414L11 10.414l-1.293 1.293a1 1 0 01-1.414-1.414L9.586 9 8.293 7.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+        </svg>
+        <span class="text-base font-medium">Nenhuma sessão ativa</span>
+      </div>
+    </div>
+
+    <p class="text-lg font-semibold text-gray-800 mb-4 mt-2">Selecione os jogadores presentes hoje: ({{selectedPlayerIds.length}})</p>
+
+    <div class="flex items-center justify-between mb-2">
+      <h4 class="text-md font-semibold text-green-700">Mensalistas</h4>
+      <button
+        class="text-sm text-green-600 hover:underline flex items-center space-x-1"
+        (click)="toggleGroupSelection(true)"
+      >
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586 6.707 9.293a1 1 0 00-1.414 1.414L9 14.414l8-8a1 1 0 000-1.414z"
+          />
+        </svg>
+        <span>
+          {{ isGroupFullySelected(true) ? 'Desmarcar todos' : 'Selecionar todos' }}
+        </span>
+      </button>      
+    </div>
+  
+    <ng-container *ngIf="allPlayers">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+        <div *ngFor="let player of monthlyPlayers">
+          <label class="flex items-center space-x-2">
+            <input [disabled]="session ? true : false" type="checkbox" class="form-checkbox h-4 w-4 text-green-600" [(ngModel)]="player.isPresentToday" (change)="toggleSelection(player)" />
+            <span class="text-gray-700">{{ player.name }} </span>
+          </label>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="flex items-center justify-between mb-2">
+      <h4 class="text-md font-semibold text-red-700">Avulsos</h4>
+      <button
+        class="text-sm text-red-600 hover:underline flex items-center space-x-1"
+        (click)="toggleGroupSelection(false)"
+      >
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586 6.707 9.293a1 1 0 00-1.414 1.414L9 14.414l8-8a1 1 0 000-1.414z"
+          />
+        </svg>
+        <span>
+          {{ isGroupFullySelected(false) ? 'Desmarcar todos' : 'Selecionar todos' }}
+        </span>
+      </button>    
+    </div>
+
+    <ng-container *ngIf="allPlayers">
+      <div *ngIf="allPlayers" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div *ngFor="let player of guestPlayers">
+          <label class="flex items-center space-x-2">
+            <input [disabled]="session ? true : false" type="checkbox" class="form-checkbox h-4 w-4 text-red-600" [(ngModel)]="player.isPresentToday" (change)="toggleSelection(player)" />
+            <span class="text-gray-700">{{ player.name }}</span>
+          </label>
+        </div>
+      </div>
+    </ng-container>
+
+    <button 
+      *ngIf="!session"
+      class="bg-green-600 hover:bg-green-700 text-white font-semibold px-5 mt-4 py-2 rounded transition disabled:bg-gray-300 disabled:cursor-not-allowed"
+      [disabled]="selectedPlayerIds.length < 8"
+      (click)="startSession()"
+    >
+      Iniciar Sessão (mín. 8 jogadores)
+    </button>
+  </div>
+</div>

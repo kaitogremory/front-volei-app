@@ -5,8 +5,8 @@
       <div class="flex space-x-6 items-center">
         <span class="font-bold text-lg tracking-wide">🏐 Vôlei App</span>        
         <a routerLink="/jogadores" routerLinkActive="underline" class="hover:underline">Jogadores</a>
-        <a routerLink="/iniciar-sessao" routerLinkActive="underline" class="hover:underline">Iniciar Sessão</a>
-        <a routerLink="/presenca" routerLinkActive="underline" class="hover:underline">Presença</a>
+        <a routerLink="/sessao-ativa" routerLinkActive="underline" class="hover:underline">Sessão de Hoje</a>
+        <a routerLink="/sessoes-passadas" routerLinkActive="underline" class="hover:underline">Jogos anteriores</a>
         <a routerLink="/gerar-times" routerLinkActive="underline" class="hover:underline">Gerar Times</a>        
       </div>
     </div>
@@ -18,6 +18,22 @@
   <app-toast></app-toast>
   <router-outlet></router-outlet>
 </main>
+
+<div
+  id="overlay"
+  *ngIf="loadingService.isLoading"
+  @fadeOverlay
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+>
+  <div class="flex items-center space-x-2">
+    <svg class="animate-spin h-6 w-6 text-white" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+    </svg>
+    <span class="text-white text-lg font-medium">Carregando...</span>
+  </div>
+</div>
+
 
 
        
