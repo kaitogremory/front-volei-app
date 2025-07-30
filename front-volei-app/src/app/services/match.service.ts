@@ -5,14 +5,14 @@ import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class MatchService {
-  private apiUrl = `${environment.apiUrl}/players`;
+  private apiUrl = `${environment.apiUrl}/matches`;
       
   constructor(
     private http: HttpClient, 
     private authService: AuthService
   ) {}  
 
-  async createMatch(request: any): Promise<any> {
+  async registerMatch(request: any): Promise<any> {
     const url = `${this.apiUrl}`;
     const body = JSON.stringify(request);
     const headers  = this.authService.createDefaultHttpHeaders();
