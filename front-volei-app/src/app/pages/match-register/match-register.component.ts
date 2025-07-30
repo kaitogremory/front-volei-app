@@ -33,9 +33,60 @@ export class MatchRegisterComponent implements OnInit {
     const activeSession = await this.sessionService.getActiveSession();
     if (activeSession) {
       this.session = activeSession;
-      this.teamQueue = [...this.session.teams];
+      const matches = await this.matchService.getMatchesBySession(this.session.id);
+
+      if (matches.length > 0) {
+        this.reconstructQueueFromMatches(matches);
+      } else {
+        this.teamQueue = [...this.session.teams];
+      }
+
       this.prepareNextMatch();
     }
+  }
+
+  reconstructQueueFromMatches(matches: any[]) {
+    const initialTeams = [...this.session.teams];
+    const queue: Team[] = [];
+    const winCounter = new Map<string, number>();
+
+    // Começa com os times da sessão, garantindo todos presentes
+    for (const team of initialTeams) {
+      queue.push({ ...team });
+    }
+
+    for (const match of matches) {
+      const winnerTeam = match.winner === 'A' ? match.teamA : match.teamB;
+      const loserTeam = match.winner === 'A' ? match.teamB : match.teamA;
+
+      const winnerKey = JSON.stringify(winnerTeam.players);
+
+      const currentWins = winCounter.get(winnerKey) || 0;
+      const isKingMode = initialTeams.length >= 4;
+
+      // Remove ambos da fila
+      const removeTeam = (teamToRemove: any) => {
+        const index = queue.findIndex(t => JSON.stringify(t.players.map((p: any) => p._id || p.id)) === JSON.stringify(teamToRemove.players.map((p: any) => p._id || p.id)));
+        if (index !== -1) queue.splice(index, 1);
+      };
+
+      removeTeam(match.teamA);
+      removeTeam(match.teamB);
+
+      // Adiciona com base na regra
+      queue.push(loserTeam);
+
+      if (isKingMode && currentWins + 1 === 2) {
+        winCounter.set(winnerKey, 0);
+        queue.push(winnerTeam); // Sai da quadra
+      } else {
+        winCounter.set(winnerKey, currentWins + 1);
+        queue.unshift(winnerTeam); // Continua na frente
+      }
+    }
+
+    this.teamQueue = queue;
+    this.winCounter = winCounter;
   }
 
   prepareNextMatch() {
@@ -49,7 +100,6 @@ export class MatchRegisterComponent implements OnInit {
   }
 
   async registerMatch() {
-    debugger
     if (!this.match.teamA || !this.match.teamB || !this.match.winner) return;
 
     const payload = {
@@ -66,29 +116,27 @@ export class MatchRegisterComponent implements OnInit {
       date: new Date()
     };
 
-
     try {
       this.loadingService.showLoading('registerMatch');
       await this.matchService.registerMatch(payload);
       this.toastService.show('Partida registrada com sucesso!', 'success');
 
-      const winnerId = this.match.winner._id;
+      const winnerId = JSON.stringify(this.match.winner.players.map(p => p.id));
       const currentWins = this.winCounter.get(winnerId) || 0;
       this.winCounter.set(winnerId, currentWins + 1);
 
       const isKingMode = this.session.teams.length >= 4;
-
       const loser = this.match.winner === this.match.teamA ? this.match.teamB : this.match.teamA;
 
-      // Remove ambos
+      // Remove os dois da fila
       this.teamQueue.splice(0, 2);
-      this.teamQueue.push(loser); // perdedor vai para o fim
+      this.teamQueue.push(loser);
 
       if (isKingMode && this.winCounter.get(winnerId) === 2) {
-        this.teamQueue.push(this.match.winner); // vencedor sai e volta depois
+        this.teamQueue.push(this.match.winner);
         this.winCounter.set(winnerId, 0);
       } else {
-        this.teamQueue.unshift(this.match.winner); // vencedor continua na frente
+        this.teamQueue.unshift(this.match.winner);
       }
 
       this.prepareNextMatch();

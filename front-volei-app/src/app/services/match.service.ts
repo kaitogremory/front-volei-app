@@ -18,4 +18,10 @@ export class MatchService {
     const headers  = this.authService.createDefaultHttpHeaders();
     return this.http.post(url, body, { headers }).toPromise();
   }
+
+  async getMatchesBySession(sessionId: string): Promise<any> {
+    const url = `${this.apiUrl}/session/${sessionId}`;    
+    const headers  = this.authService.createDefaultHttpHeaders();    
+    return this.http.get(url, { headers }).toPromise();
+  }
 }
