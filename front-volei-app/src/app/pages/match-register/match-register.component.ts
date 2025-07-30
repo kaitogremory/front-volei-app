@@ -5,6 +5,7 @@ import { ToastService } from 'src/app/services/toast.service';
 import { LoadingService } from 'src/app/services/loading.service';
 import { Session } from 'src/app/interfaces/Session';
 import { Team } from 'src/app/interfaces/Team';
+import { Match } from 'src/app/interfaces/Match';
 
 @Component({
   selector: 'app-match-register',
@@ -21,6 +22,8 @@ export class MatchRegisterComponent implements OnInit {
 
   teamQueue: Team[] = [];
   winCounter = new Map<string, number>();
+  showHistory = true;
+  matchHistory: Match[] = [];
 
   constructor(
     private sessionService: SessionService,
@@ -36,12 +39,13 @@ export class MatchRegisterComponent implements OnInit {
       const matches = await this.matchService.getMatchesBySession(this.session.id);
 
       if (matches.length > 0) {
-        this.reconstructQueueFromMatches(matches);
+        this.matchHistory = await this.matchService.getMatchesBySession(this.session.id);
+        this.reconstructQueueFromMatches(this.matchHistory);
+        this.prepareNextMatch();
       } else {
         this.teamQueue = [...this.session.teams];
+        this.prepareNextMatch();
       }
-
-      this.prepareNextMatch();
     }
   }
 

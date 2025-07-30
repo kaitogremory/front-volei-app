@@ -1,7 +1,7 @@
 export interface Match {
   _id?: string;
-  teamA: string;
-  teamB: string;
+  teamA: any;
+  teamB: any;
   winner: string;
   date: string;
 }
