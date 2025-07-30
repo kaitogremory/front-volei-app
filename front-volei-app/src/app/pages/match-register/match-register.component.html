@@ -1,0 +1,50 @@
+<div class="p-6">
+    <h2 class="text-2xl font-bold mb-4">Registrar Partida</h2>
+
+    <div *ngIf="!session" class="text-gray-500 italic mt-4">
+        não tem sessão ativa
+    </div>
+
+    <div *ngIf="session">
+        <form (ngSubmit)="registerMatch()" *ngIf="session.teams.length >= 2">
+            <!-- Seleção de Times -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div>
+                <label class="block font-medium mb-1">Time A</label>
+                <select [(ngModel)]="match.teamA" name="teamA" class="w-full border p-2 rounded">
+                <option *ngFor="let team of session.teams" [ngValue]="team">{{ team.name }}</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block font-medium mb-1">Time B</label>
+                <select [(ngModel)]="match.teamB" name="teamB" class="w-full border p-2 rounded">
+                <option *ngFor="let team of session.teams" [ngValue]="team">{{ team.name }}</option>
+                </select>
+            </div>
+            </div>
+
+            <!-- Seleção de Vencedor -->
+            <div class="mb-4">
+            <label class="block font-medium mb-1">Vencedor</label>
+            <select [(ngModel)]="match.winner" name="winner" class="w-full border p-2 rounded">
+                <option *ngIf="match.teamA" [ngValue]="match.teamA">{{ match.teamA.name }}</option>
+                <option *ngIf="match.teamB" [ngValue]="match.teamB">{{ match.teamB.name }}</option>
+            </select>
+            </div>
+
+            <!-- Botão de Salvar -->
+            <button
+            type="submit"
+            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded disabled:opacity-50"
+            [disabled]="!match.teamA || !match.teamB || !match.winner || match.teamA === match.teamB"
+            >
+            Salvar Partida
+            </button>
+        </form>
+
+        <p *ngIf="session.teams.length < 2" class="text-red-600 font-medium">
+            É necessário ter pelo menos dois times para registrar uma partida.
+        </p>
+    </div>
+</div>

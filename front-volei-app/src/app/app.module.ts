@@ -9,10 +9,10 @@ import { PlayersComponent } from './pages/players/players.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalComponent } from './shared/modal/modal.component';
 import { ToastComponent } from './shared/toast/toast.component';
-import { SessionHistoryComponent } from './pages/session-history/session-history.component';
 import { ActiveSessionComponent } from './pages/active-session/active-session.component';
 import { ConfirmationModalComponent } from './shared/confirmation-modal/confirmation-modal.component';
 import { GenerateTeamsComponent } from './pages/generate-teams/generate-teams.component';
+import { MatchRegisterComponent } from './pages/match-register/match-register.component';
 
 @NgModule({
   declarations: [
@@ -20,10 +20,10 @@ import { GenerateTeamsComponent } from './pages/generate-teams/generate-teams.co
     PlayersComponent,
     ModalComponent,
     ToastComponent,
-    SessionHistoryComponent,
     ActiveSessionComponent,
     ConfirmationModalComponent,
-    GenerateTeamsComponent
+    GenerateTeamsComponent,
+    MatchRegisterComponent
   ],
   imports: [
     BrowserModule,

@@ -60,7 +60,8 @@ export class GenerateTeamsComponent {
 
     const result: Team[] = Array.from({ length: this.teamCount }, (_, index) => ({
       name: `Time ${index + 1}`,
-      players: []
+      players: [],
+      _id: ''
     }));
 
     this.keyPlayers.forEach((id, index) => {
