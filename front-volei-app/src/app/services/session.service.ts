@@ -43,4 +43,10 @@ export class SessionService {
     const headers  = this.authService.createDefaultHttpHeaders();
     return this.http.put(url, body, { headers }).toPromise();
   }
+
+  async updateTeams(sessionId: string, teams: any[]): Promise<any> {
+    const url = `${this.apiUrl}/${sessionId}/teams`;
+    const headers = this.authService.createDefaultHttpHeaders();
+    return this.http.put(url, { teams }, { headers }).toPromise();
+  }
 }

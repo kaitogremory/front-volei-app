@@ -16,7 +16,7 @@
       <!-- Coluna 1: Iniciais -->
       <div>
         <p class="text-lg font-semibold text-gray-800 mb-4 mt-2">
-          Jogadores presentes: ({{ session.players?.length }})
+          Jogadores presentes: ({{ session.players.length }})
         </p>
         <ul class="list-disc list-inside text-gray-800 space-y-1">
           <li *ngFor="let player of session?.players" class="flex items-center justify-between">

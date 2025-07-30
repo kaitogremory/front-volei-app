@@ -1,0 +1,126 @@
+<div class="p-6">
+    <h2 class="text-2xl font-bold mb-4">Gerar Times</h2>
+
+    <div *ngIf="!session" class="mt-6">
+        não tem sessão ativa
+    </div>
+
+    <div *ngIf="session">
+        <div *ngIf="session.players.length > 0">
+            <p class="mb-2 text-sm text-gray-700">Jogadores presentes: {{ session.players.length }}</p>
+
+            <div class="mb-4 border border-gray-300 rounded-md">
+                <button 
+                    class="w-full text-left px-4 py-2 bg-gray-100 hover:bg-gray-200 font-semibold flex items-center justify-between"
+                    (click)="toggleKeySelection()"
+                >
+                    Selecionar cabeças de chave
+                    <span class="text-xs text-gray-500">({{ keyPlayers.length }} selecionados)</span>
+                </button>
+
+                <div *ngIf="showKeySelection" class="px-4 py-2">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-1">
+                        <label *ngFor="let player of session.players" class="flex items-center space-x-2 text-sm">
+                            <input 
+                            type="checkbox" 
+                            [value]="player.id" 
+                            (change)="toggleKeyPlayer(player.id)" 
+                            [checked]="keyPlayers.includes(player.id)"
+                            />
+                            <span>{{ player.name }}</span>
+                        </label>
+                    </div>
+
+                    <!-- Número de times e botão de gerar -->
+                    <div class="flex flex-wrap items-end justify-between mb-4 mt-3">
+                        <div>
+                            <label class="block font-medium text-sm mb-1" for="teamCount">Número de times:</label>
+                            <input id="teamCount" type="number" min="2" [(ngModel)]="teamCount" class="border p-2 rounded w-20" />
+                        </div>
+
+                        <button 
+                            class="mt-2 sm:mt-0 flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+                            (click)="generateTeams()"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M4 4v6h6M20 20v-6h-6M4 20l16-16" />
+                            </svg>
+                            <span>Gerar Times</span>
+                        </button>
+                    </div>
+                </div> 
+            </div>
+        </div>   
+
+        <div *ngIf="session.players.length == 0">
+            <p class="text-red-600 font-medium">Nenhum jogador presente na sessão ativa.</p>
+        </div>
+
+        <div *ngIf="session.teams.length > 0" class="mt-6">                    
+            <div class="flex items-center justify-between mb-2">
+                <h3 class="text-xl font-semibold">Times Gerados:</h3>
+
+                <button 
+                (click)="saveTeams()" 
+                class="flex items-center bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M5 13l4 4L19 7" />
+                </svg>
+                Salvar Times
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div *ngFor="let team of session.teams; let i = index" class="border p-4 rounded shadow bg-gray-50">
+                <h4 class="font-bold mb-2">{{ team.name || 'Time ' + (i + 1) }}</h4>
+
+                <ul class="space-y-2">
+                    <li *ngFor="let player of team.players" class="flex justify-between items-center text-sm text-gray-800">
+                    <span>{{ player.name }}</span>
+
+                    <!-- Botões de mover para outros times -->
+                    <div class="flex space-x-1">
+                        <button 
+                        *ngFor="let t of session.teams; let j = index" 
+                        [disabled]="j === i"
+                        (click)="movePlayer(player, i, j)"
+                        [ngClass]="{
+                            'bg-red-100 text-red-600 border border-red-300 cursor-not-allowed': j === i,
+                            'bg-gray-100 text-gray-700 hover:bg-blue-100 hover:text-blue-700 border border-gray-300 cursor-pointer': j !== i
+                        }"
+                        class="rounded-full w-7 h-7 flex items-center justify-center text-xs font-medium mx-0.5 transition"
+                        title="Mover para Time {{ j + 1 }}"
+                        >
+                        {{ j + 1 }}
+                        </button>
+                    </div>
+                    </li>
+                </ul>
+                </div>
+            </div>
+
+            <!-- Jogadores sem time -->        
+            <h3 class="text-lg font-semibold text-gray-800 mb-2 mt-2">Jogadores sem time</h3>
+
+            <ul *ngIf="notInAnyTeam.length > 0" class="space-y-2">
+            <li *ngFor="let player of notInAnyTeam" class="flex items-center justify-between bg-gray-100 p-2 rounded shadow-sm">
+                <span class="text-gray-700">{{ player.name }}</span>
+
+                <div class="flex space-x-1">
+                <button
+                    *ngFor="let t of session.teams; let j = index"
+                    class="bg-green-100 hover:bg-green-200 text-green-700 border border-green-300 text-xs px-2 py-1 rounded"
+                    (click)="addPlayerToTeam(player, j)"
+                >
+                    Add ao Time {{ j + 1 }}
+                </button>
+                </div>
+            </li>
+            </ul>
+
+            <p *ngIf="notInAnyTeam.length === 0" class="text-gray-500 italic">Todos os jogadores estão em algum time.</p>
+        </div>
+    </div>
+</div>
+
+

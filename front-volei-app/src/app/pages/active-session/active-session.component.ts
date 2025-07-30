@@ -32,7 +32,6 @@ export class ActiveSessionComponent  {
       this.loadingService.showLoading('getActiveSession');      
       const response = await this.sessionService.getActiveSession();      
       this.session = response;
-      console.log(response)
       await this.getAllPlayers();
 
     } catch (err: any) {      
@@ -85,6 +84,7 @@ export class ActiveSessionComponent  {
     if (this.session) {
       await this.sessionService.closeSession(this.session.id);
       this.session = null;
+      this.showConfirmModal = false;
     }
   }
 
@@ -174,7 +174,6 @@ export class ActiveSessionComponent  {
         players: this.session.players.map(p => p.id),
         playersGone: this.session.playersGone.map(p => p.id)
       };
-      console.log('request:', request)
       const updatedSession = await this.sessionService.updateSession(request);      
       this.toastService.show('Sessão atualizada com sucesso!', 'success');
     } catch (err: any) {
