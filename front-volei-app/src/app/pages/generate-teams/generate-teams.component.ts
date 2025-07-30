@@ -25,17 +25,17 @@ export class GenerateTeamsComponent {
     private baseService: BaseService
   ) {
     this.getActiveSession();
-  }
-
-  async ngAfterViewInit() {
-    //this.getActiveSession();
-  }
+  }  
 
   public async getActiveSession() {    
     try {
       this.loadingService.showLoading('getActiveSession');      
       const response = await this.sessionService.getActiveSession();      
       this.session = response;
+
+      if(this.session) {
+        this.showKeySelection = false;
+      }
     } catch (err: any) {      
       this.baseService.processError(err);
     } finally {
@@ -114,7 +114,7 @@ export class GenerateTeamsComponent {
     try {
       this.loadingService.showLoading('saveTeams');
       const updatedSession = await this.sessionService.updateTeams(this.session.id, teamsPayload);
-      this.session = updatedSession;
+      this.showKeySelection = false;
       this.toastService.show('Times salvos com sucesso!', 'success');
     } catch (err: any) {
       this.toastService.show('Erro ao salvar os times.', 'error');
