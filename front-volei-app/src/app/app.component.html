@@ -2,16 +2,40 @@
 <nav class="bg-blue-700 text-white fixed top-0 left-0 right-0 z-50 shadow">
   <div class="max-w-7xl mx-auto px-4">
     <div class="flex justify-between items-center h-14">
-      <div class="flex space-x-6 items-center">
-        <span class="font-bold text-lg tracking-wide">🏐 Vôlei App</span>        
-        <a routerLink="/jogadores" routerLinkActive="underline" class="hover:underline">Jogadores</a>
-        <a routerLink="/sessao-ativa" routerLinkActive="underline" class="hover:underline">Sessão Ativa</a>        
-        <a routerLink="/gerar-times" routerLinkActive="underline" class="hover:underline">Gerar Times</a>    
-        <a routerLink="/partidas" routerLinkActive="underline" class="hover:underline">Partidas</a>    
+      <!-- Logo -->
+      <div class="flex items-center">
+        <span class="font-bold text-lg tracking-wide">🏐 Vôlei App</span>
       </div>
+
+      <!-- Botão Mobile -->
+      <div class="md:hidden">
+        <button (click)="mobileMenuOpen = !mobileMenuOpen" class="focus:outline-none">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+               viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Menu Desktop -->
+      <div class="hidden md:flex space-x-6 items-center">
+        <a routerLink="/jogadores" routerLinkActive="underline" class="hover:underline">Jogadores</a>
+        <a routerLink="/sessao-ativa" routerLinkActive="underline" class="hover:underline">Sessão Ativa</a>
+        <a routerLink="/gerar-times" routerLinkActive="underline" class="hover:underline">Gerar Times</a>
+        <a routerLink="/partidas" routerLinkActive="underline" class="hover:underline">Partidas</a>
+      </div>
+    </div>
+
+    <!-- Menu Mobile -->
+    <div *ngIf="mobileMenuOpen" class="md:hidden flex flex-col space-y-2 mt-2 pb-2 border-t border-white">
+      <a routerLink="/jogadores" routerLinkActive="underline" class="hover:underline" (click)="mobileMenuOpen = false">Jogadores</a>
+      <a routerLink="/sessao-ativa" routerLinkActive="underline" class="hover:underline" (click)="mobileMenuOpen = false">Sessão Ativa</a>
+      <a routerLink="/gerar-times" routerLinkActive="underline" class="hover:underline" (click)="mobileMenuOpen = false">Gerar Times</a>
+      <a routerLink="/partidas" routerLinkActive="underline" class="hover:underline" (click)="mobileMenuOpen = false">Partidas</a>
     </div>
   </div>
 </nav>
+
 
 <!-- Conteúdo Principal -->
 <main class="pt-20 px-4 pb-10 max-w-7xl mx-auto">

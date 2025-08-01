@@ -14,20 +14,36 @@
       </strong>
     </div>
 
-    <!-- Times em partida -->
+    <!-- Seleção manual dos times -->
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
       <div class="border rounded shadow p-4">
+        <label class="block font-semibold mb-2">Selecionar Time A</label>
+        <select [(ngModel)]="match.teamA" name="teamA" class="w-full border p-2 rounded">
+          <option *ngFor="let team of session.teams" [ngValue]="team">{{ team.name }}</option>
+        </select>
+      </div>
+      <div class="border rounded shadow p-4">
+        <label class="block font-semibold mb-2">Selecionar Time B</label>
+        <select [(ngModel)]="match.teamB" name="teamB" class="w-full border p-2 rounded">
+          <option *ngFor="let team of session.teams" [ngValue]="team">{{ team.name }}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Exibição dos jogadores -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4" *ngIf="match.teamA && match.teamB">
+      <div class="border rounded shadow p-4">
         <h4 class="text-lg font-semibold mb-2">Time A</h4>
-        <p class="text-sm text-gray-600 mb-1">{{ match.teamA?.name }}</p>
+        <p class="text-sm text-gray-600 mb-1">{{ match.teamA.name }}</p>
         <ul class="list-disc list-inside text-sm text-gray-800">
-          <li *ngFor="let p of match.teamA?.players">{{ p.name }}</li>
+          <li *ngFor="let p of match.teamA.players">{{ p.name }}</li>
         </ul>
       </div>
       <div class="border rounded shadow p-4">
         <h4 class="text-lg font-semibold mb-2">Time B</h4>
-        <p class="text-sm text-gray-600 mb-1">{{ match.teamB?.name }}</p>
+        <p class="text-sm text-gray-600 mb-1">{{ match.teamB.name }}</p>
         <ul class="list-disc list-inside text-sm text-gray-800">
-          <li *ngFor="let p of match.teamB?.players">{{ p.name }}</li>
+          <li *ngFor="let p of match.teamB.players">{{ p.name }}</li>
         </ul>
       </div>
     </div>
@@ -49,25 +65,6 @@
     >
       Registrar Partida
     </button>
-
-   <!-- Fila de times com destaque nos times em jogo -->
-    <div class="mt-6">
-    <h3 class="text-lg font-semibold mb-2">Fila de Times</h3>
-    <div class="flex flex-wrap gap-3">
-        <div
-        *ngFor="let team of teamQueue; let idx = index"
-        class="border px-4 py-2 rounded shadow text-sm transition-all duration-200"
-        [ngClass]="{
-            'bg-yellow-100 border-yellow-400 ring-2 ring-yellow-300': idx === 0 || idx === 1,
-            'bg-gray-50 border-gray-200': idx > 1
-        }"
-        >
-        <div class="font-semibold">{{ team.name }}</div>
-        <div class="text-gray-600 text-xs">Vitórias seguidas: {{ winCounter.get(team._id) || 0 }}</div>
-        </div>
-    </div>
-    </div>
-
 
     <!-- Histórico de partidas (expansível) -->
     <div class="mt-8">

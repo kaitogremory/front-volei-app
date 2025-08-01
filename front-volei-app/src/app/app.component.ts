@@ -30,6 +30,7 @@ import { LoadingService } from './services/loading.service';
 })
 export class AppComponent {
   title = 'front-volei-app';
+  mobileMenuOpen = false;
 
   constructor(public loadingService: LoadingService) {}
 }
